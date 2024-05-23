@@ -2,8 +2,8 @@
 # Contributor: Levente Polyak <anthraxx[at]archlinux[dot]org>
 
 pkgname=publicsuffix-list
-_gitcommit=4f29f15313eef1a540b3c8222ab891debf405a59
-pkgver=20220825.1289.4f29f15
+_gitcommit=0ed17ee161ed2ae551c78f3b399ac8f2724d2154
+pkgver=20240513.1499.0ed17ee
 pkgrel=1
 pkgdesc='Cross-vendor public domain suffix database'
 url='https://github.com/publicsuffix/list'
