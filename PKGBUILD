@@ -8,10 +8,14 @@ url='https://www.videolan.org/projects/dav1d.html'
 arch=(x86_64 aarch64 riscv64)
 license=(BSD-2-Clause)
 depends=(musl xxhash)
-makedepends=(meson ninja nasm)
+makedepends=(meson ninja)
 provides=(libdav1d.so)
 source=("https://downloads.videolan.org/pub/videolan/dav1d/$pkgver/dav1d-$pkgver.tar.xz")
 sha256sums=('42fe524bcc82ea3a830057178faace22923a79bad3d819a4962d8cfc54c36f19')
+
+if [ $CARCH = x86_64 ]; then
+	makedepends+=(nasm)
+fi
 
 build () {
 	local arch_options=()
