@@ -248,6 +248,10 @@ build()
     -DLLVM_ENABLE_RUNTIMES="libunwind;libcxxabi;libcxx" \
     -S $_basedir/llvm
 
+  # Ensure compiler-rt has been available before building other rt libraries
+  ninja -C build clang
+  ninja -C build compiler-rt
+  ninja -C build runtimes
   ninja -C build
 
   export DESTDIR="${srcdir}/PKGDIR"
