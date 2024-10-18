@@ -10,7 +10,7 @@ license=(GPL-2.0-only)
 makedepends=(bison flex perl python libelf linux-headers rsync lld git)
 source=(
   "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-$pkgver.tar.xz"
-  "kernel-config::git+https://github.com/eweOS/kernel-config.git"
+  "kernel-config::git+https://github.com/ziyao233/eweos-kernel-config.git"
   busybox-find-compat.patch
 )
 sha256sums=('057263d0afc17d5253794afd3d239ba4da4aa734b22fa36c1665f41b95449b73'
