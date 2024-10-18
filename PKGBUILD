@@ -1,11 +1,11 @@
 # Maintainer: Yukari Chiba <i@0x7f.cc>
 
-pkgname=(llvm llvm-libs llvm-lto lldb openmp lld clang flang mlir wasi-libc++ wasi-libc++abi wasi-compiler-rt)
+pkgname=(llvm llvm-libs llvm-lto lldb openmp lld clang flang mlir)
 _realpkgname=llvm-project
 pkgver=18.1.8
 _binutilsver=2.42
 pkgrel=4
-arch=('x86_64' 'aarch64' 'riscv64')
+arch=('x86_64' 'aarch64' 'riscv64' 'loongarch64')
 url='htps://llvm.org'
 license=('custom:Apache 2.0 with LLVM Exception')
 makedepends=(
@@ -14,15 +14,12 @@ makedepends=(
   ninja
   utmps
   zlib
+  lld
   libffi
   libedit
   linux-headers
   git
   libxml2
-  lld
-  wasi-libc
-  openmp
-  spirv-llvm-translator
   python
 )
 source=(
@@ -33,14 +30,16 @@ source=(
   0001-clang-force-libc-linked-with-no-as-needed-when-using.patch
   backport-fix-wayfire-lambda-instantiation.patch
   fix-HandleSDNode.patch
+  "fix-loongarch64-sc-addrerr.patch::https://github.com/llvm/llvm-project/commit/1825cf28dc83113200b623ebcf063eea35ade79a.patch"
 )
 sha256sums=('0b58557a6d32ceee97c8d533a59b9212d87e0fc4d2833924eb6c611247db2f2a'
-            'f6e4d41fd5fc778b06b7891457b3620da5ecea1006c6a4a41ae998109f85a800'
-            '5e58f02fe01ea22ea0406e4250ad89a053d517ef103a1dacfade4ecd98a7f2bc'
-            'e2655207dd8a90e8fdc9c7cc7c701738bc8ba932692a0752ace8cd06b45ccf94'
-            '57808d224fd9218a936e6669bf4129eaf4aa04fbd45ab9f7fd5a20efc304e307'
-            'a25dacfebddbbc0e07c4b479d7e1e9c4cc2cc12f4689a95721dc773003101460'
-            'adf4e3795ccaa74b04e90844e51868f9e526e0ec38972f378d8ab7fa777a82d3')
+	    'f6e4d41fd5fc778b06b7891457b3620da5ecea1006c6a4a41ae998109f85a800'
+	    '5e58f02fe01ea22ea0406e4250ad89a053d517ef103a1dacfade4ecd98a7f2bc'
+	    'e2655207dd8a90e8fdc9c7cc7c701738bc8ba932692a0752ace8cd06b45ccf94'
+	    '57808d224fd9218a936e6669bf4129eaf4aa04fbd45ab9f7fd5a20efc304e307'
+	    'a25dacfebddbbc0e07c4b479d7e1e9c4cc2cc12f4689a95721dc773003101460'
+	    'adf4e3795ccaa74b04e90844e51868f9e526e0ec38972f378d8ab7fa777a82d3'
+	    'd49121e00ccd5134bc8b42d1126b6b9bfc8a367ff268cd6dd98086818fae342c')
 
 _basedir=$_realpkgname-$pkgver.src
 
@@ -161,6 +160,7 @@ prepare()
   patch -p1 < $srcdir/0001-clang-force-libc-linked-with-no-as-needed-when-using.patch
   patch -p1 < $srcdir/backport-fix-wayfire-lambda-instantiation.patch
   patch -p1 < $srcdir/fix-HandleSDNode.patch
+  patch -p1 < $srcdir/fix-loongarch64-sc-addrerr.patch
   mkdir -p cmake/Platform && echo "set(WASI 1)" > cmake/Platform/WASI.cmake
 }
 
@@ -190,7 +190,7 @@ build()
     -DLLVM_BUILD_LLVM_DYLIB=ON
     -DLLVM_LINK_LLVM_DYLIB=ON
     -DLLVM_INCLUDE_BENCHMARKS=OFF
-    -DLLVM_TARGETS_TO_BUILD="X86;AArch64;RISCV;LoongArch;WebAssembly;AMDGPU"
+    -DLLVM_TARGETS_TO_BUILD="LoongArch;WebAssembly"
     -DLIBCXX_HAS_MUSL_LIBC=ON
     -DLIBCXX_USE_COMPILER_RT=ON
     -DLIBCXX_INCLUDE_TESTS=OFF
@@ -215,49 +215,6 @@ build()
     -DCLANG_CONFIG_FILE_SYSTEM_DIR=/etc/clang
   )
 
-  export WASI_COMMON_ARGS=(
-    -DCMAKE_BUILD_TYPE=Release
-    -DCMAKE_C_COMPILER_WORKS=ON
-    -DCMAKE_CXX_COMPILER_WORKS=ON
-    -DCMAKE_AR=/usr/bin/ar
-    -DCMAKE_MODULE_PATH="${srcdir}"/cmake
-    -DCMAKE_TOOLCHAIN_FILE="${srcdir}"/wasi-toolchain.cmake
-    -DWASI_SDK_PREFIX=/usr
-    -DUNIX=ON
-  )
-
-  export WASI_RUNTIME_ARGS=(
-    -DLLVM_ENABLE_RUNTIMES="libcxx;libcxxabi"
-    -DCMAKE_STAGING_PREFIX=/usr/share/wasi-sysroot
-    -DCMAKE_SYSROOT=/usr/share/wasi-sysroot
-    -DLIBCXX_ABI_VERSION=2
-    -DLIBCXX_CXX_ABI=libcxxabi
-    -DLIBCXX_ENABLE_THREADS=OFF
-    -DLIBCXXABI_ENABLE_THREADS=OFF
-    -DLIBCXX_HAS_PTHREAD_API=OFF
-    -DLIBCXXABI_HAS_PTHREAD_API=OFF
-    -DLIBCXX_ENABLE_EXCEPTIONS=OFF
-    -DLIBCXXABI_ENABLE_EXCEPTIONS=OFF
-    -DLIBCXX_ENABLE_FILESYSTEM=OFF
-    -DLIBCXX_ENABLE_SHARED=OFF
-    -DLIBCXXABI_ENABLE_SHARED=OFF
-    -DLIBCXX_HAS_WIN32_THREAD_API=OFF
-    -DLIBCXXABI_HAS_WIN32_THREAD_API=OFF
-    -DLIBCXX_HAS_MUSL_LIBC=ON
-    -DLIBCXX_HAS_EXTERNAL_THREAD_API=OFF
-    -DLIBCXXABI_HAS_EXTERNAL_THREAD_API=OFF
-    -DLIBCXXABI_USE_LLVM_UNWINDER=OFF
-  )
-
-  export WASI_CRT_ARGS=(
-    -DCOMPILER_RT_BAREMETAL_BUILD=ON
-    -DCOMPILER_RT_INCLUDE_TESTS=OFF
-    -DCOMPILER_RT_HAS_FPIC_FLAG=OFF
-    -DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON
-    -DCOMPILER_RT_OS_DIR=wasi
-    -DCMAKE_INSTALL_PREFIX=/usr/lib/clang/$pkgver/
-  )
-
   case $CARCH in
     x86_64)
       CMARGS+=("-DCOMPILER_RT_BUILD_SANITIZERS=ON")
@@ -268,6 +225,8 @@ build()
     riscv64)
       CMARGS+=("-DCOMPILER_RT_BUILD_SANITIZERS=OFF")
       ;;
+    loongarch64)
+      CMARGS+=("-DCOMPILER_RT_BUILD_SANITIZERS=OFF")
   esac
 
   cmake -B build -G Ninja \
@@ -287,30 +246,6 @@ build()
 
   ninja -C build install
   ninja -C build install-runtimes
-
-  export CFLAGS="$(echo $CFLAGS | sed "s/-mtune=generic//; s/-march=\S*//")"
-  export CXXFLAGS="$(echo $CXXFLAGS | sed "s/-mtune=generic//; s/-march=\S*//")"
-
-  case $CARCH in
-    x86_64)
-      export CFLAGS="$(echo $CFLAGS | sed "s/-fstack-clash-protection//; s/-fcf-protection//; s/-fexceptions//")"
-      export CXXFLAGS="$(echo $CXXFLAGS | sed "s/-fstack-clash-protection//; s/-fcf-protection//; s/-fexceptions//")"
-      ;;
-  esac
-
-  cmake -B build-wasi-cxx -G Ninja \
-    "${WASI_COMMON_ARGS[@]}" \
-    "${WASI_RUNTIME_ARGS[@]}" \
-    -S $_basedir/runtimes
-
-  ninja -C build-wasi-cxx
-
-  cmake -B build-wasi-crt -G Ninja \
-    "${WASI_COMMON_ARGS[@]}" \
-    "${WASI_CRT_ARGS[@]}" \
-    -S $_basedir/compiler-rt/lib/builtins
-
-  ninja -C build-wasi-crt
 
   cd $srcdir/PKGDIR
   _pick_ clang "${FLIST_clang[@]}"
