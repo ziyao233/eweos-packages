@@ -1,0 +1,18 @@
+diff --git a/config/build-bindings.xml b/config/build-bindings.xml
+index cef03a9..ab55d3b 100644
+--- a/config/build-bindings.xml
++++ b/config/build-bindings.xml
+@@ -63,12 +63,7 @@ This script is included in /config/build-definitions.xml.
+     <property name="binding.openxr" value="true"/>
+     <property name="binding.opus" value="true"/>
+     <property name="binding.par" value="true"/>
+-    <condition property="binding.remotery" value="false" else="true">
+-        <and>
+-            <isset property="platform.windows"/>
+-            <isset property="build.arch.arm"/>
+-        </and>
+-    </condition>
++    <property name="binding.remotery" value="false"/>
+     <property name="binding.rpmalloc" value="true"/>
+     <property name="binding.shaderc" value="true"/>
+     <property name="binding.spvc" value="true"/>

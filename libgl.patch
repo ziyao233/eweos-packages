@@ -1,0 +1,27 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index 88b07101a..c1559e00c 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -340,7 +340,7 @@
+                 <arg value="-ldl"/>
+                 <arg value="-lm"/>
+-                <arg value="-l:libGL.so.1" unless:set="gcc.libpath.opengl"/>
++                <arg value="-l:libOpenGL.so.0" unless:set="gcc.libpath.opengl"/>
+-                <arg line="-L ${gcc.libpath.opengl} -l:libGL.so.1" if:set="gcc.libpath.opengl"/>
++                <arg line="-L ${gcc.libpath.opengl} -l:libOpenGL.so.0" if:set="gcc.libpath.opengl"/>
+             </link>
+         </build>
+ 
+diff --git a/modules/lwjgl/opengl/src/main/java/org/lwjgl/opengl/GL.java b/modules/lwjgl/opengl/src/main/java/org/lwjgl/opengl/GL.java
+index 22d2f5678..ff639602e 100644
+--- a/modules/lwjgl/opengl/src/main/java/org/lwjgl/opengl/GL.java
++++ b/modules/lwjgl/opengl/src/main/java/org/lwjgl/opengl/GL.java
+@@ -99,7 +99,7 @@ public final class GL {
+         switch (Platform.get()) {
+             case FREEBSD:
+             case LINUX:
+-                GL = Library.loadNative(GL.class, "org.lwjgl.opengl", Configuration.OPENGL_LIBRARY_NAME, "libGLX.so.0", "libGL.so.1", "libGL.so");
++                GL = Library.loadNative(GL.class, "org.lwjgl.opengl", Configuration.OPENGL_LIBRARY_NAME, "libOpenGL.so.0");
+                 break;
+             case MACOSX:
+                 GL = Library.loadNative(GL.class, "org.lwjgl.opengl", Configuration.OPENGL_LIBRARY_NAME, "/System/Library/Frameworks/OpenGL.framework/Versions/Current/OpenGL");

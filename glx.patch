@@ -1,0 +1,44 @@
+diff --git a/config/build-bindings.xml b/config/build-bindings.xml
+index 612993984..d90de3f8f 100644
+--- a/config/build-bindings.xml
++++ b/config/build-bindings.xml
+@@ -49,7 +49,7 @@ This script is included in /config/build-definitions.xml.
+     <property name="binding.odbc" value="true"/>
+     <property name="binding.openal" value="true"/>
+     <property name="binding.opencl" value="true"/>
+-    <property name="binding.opengl" value="true"/>
++    <property name="binding.opengl" value="false"/>
+     <property name="binding.opengles" value="true"/>
+     <condition property="binding.openvr" value="true" else="false">
+         <or>
+diff --git a/modules/lwjgl/glfw/src/generated/java/org/lwjgl/glfw/GLFWNativeOSMesa.java b/modules/lwjgl/glfw/src/generated/java/org/lwjgl/glfw/GLFWNativeOSMesa.java
+index b29d7973a..dc7bc34ac 100644
+--- a/modules/lwjgl/glfw/src/generated/java/org/lwjgl/glfw/GLFWNativeOSMesa.java
++++ b/modules/lwjgl/glfw/src/generated/java/org/lwjgl/glfw/GLFWNativeOSMesa.java
+@@ -19,7 +19,6 @@ import static org.lwjgl.system.JNI.*;
+ import static org.lwjgl.system.MemoryUtil.*;
+ 
+ import javax.annotation.*;
+-import org.lwjgl.opengl.GL;
+ 
+ import static org.lwjgl.system.MemoryUtil.*;
+ 
+@@ -217,4 +216,4 @@ public class GLFWNativeOSMesa {
+         memPutAddress(override, path == null ? NULL : memAddress(memUTF8(path)));
+     }
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/modules/lwjgl/glfw/src/templates/kotlin/glfw/templates/GLFWNativeOSMesa.kt b/modules/lwjgl/glfw/src/templates/kotlin/glfw/templates/GLFWNativeOSMesa.kt
+index c8116d150..923d2c68e 100644
+--- a/modules/lwjgl/glfw/src/templates/kotlin/glfw/templates/GLFWNativeOSMesa.kt
++++ b/modules/lwjgl/glfw/src/templates/kotlin/glfw/templates/GLFWNativeOSMesa.kt
+@@ -11,7 +11,6 @@ import opengl.*
+ val GLFWNativeOSMesa = "GLFWNativeOSMesa".nativeClass(Module.GLFW, prefix = "GLFW", binding = GLFW_BINDING_DELEGATE) {
+     javaImport(
+         "javax.annotation.*",
+-        "org.lwjgl.opengl.GL",
+         "static org.lwjgl.system.MemoryUtil.*"
+     )
+ 

@@ -1,0 +1,22 @@
+diff --git a/config/build-bindings.xml b/config/build-bindings.xml
+index 612993984..cef03a99b 100644
+--- a/config/build-bindings.xml
++++ b/config/build-bindings.xml
+@@ -28,7 +28,7 @@ This script is included in /config/build-definitions.xml.
+     <property name="binding.glfw" value="true"/>
+     <property name="binding.harfbuzz" value="true"/>
+     <property name="binding.hwloc" value="true"/>
+-    <property name="binding.jawt" value="true"/>
++    <property name="binding.jawt" value="false"/>
+     <property name="binding.jemalloc" value="true"/>
+     <property name="binding.ktx" value="true"/>
+     <property name="binding.libdivide" value="true"/>
+@@ -87,7 +87,7 @@ This script is included in /config/build-definitions.xml.
+     <property name="java-only.binding.cuda" value="true"/>
+     <property name="java-only.binding.egl" value="true"/>
+     <property name="java-only.binding.fmod" value="true"/>
+-    <property name="java-only.binding.jawt" value="true"/>
++    <property name="java-only.binding.jawt" value="false"/>
+     <property name="java-only.binding.odbc" value="true"/>
+     <property name="java-only.binding.opencl" value="true"/>
+ 

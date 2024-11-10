@@ -1,0 +1,107 @@
+diff --git a/config/linux/build.xml b/config/linux/build.xml
+index a1798b6aa..88b07101a 100644
+--- a/config/linux/build.xml
++++ b/config/linux/build.xml
+@@ -5,26 +5,13 @@
+ <project name="native-linux" basedir="../.." xmlns:if="ant:if" xmlns:unless="ant:unless">
+     <import file="../build-definitions.xml"/>
+ 
+-    <condition property="linux.triplet" value="arm-linux-gnueabihf"><isset property="build.arch.arm32"/></condition>
+-    <condition property="linux.triplet" value="aarch64-linux-gnu"><isset property="build.arch.arm64"/></condition>
+-    <condition property="linux.triplet" value="powerpc64le-linux-gnu"><isset property="build.arch.ppc64le"/></condition>
+-    <condition property="linux.triplet" value="riscv64-linux-gnu"><isset property="build.arch.riscv64"/></condition>
+-    <condition property="linux.triplet" value="x86_64-linux-gnu"><isset property="build.arch.x64|x86"/></condition>
+-
+-    <condition property="gcc.prefix" value="" else="${linux.triplet}-">
+-        <isset property="build.arch.x64|x86"/>
+-    </condition>
+-    <condition property="gcc.suffix" value="-${gcc.version}" else="">
+-        <isset property="gcc.version"/>
+-    </condition>
+-
+     <property name="module.lwjgl.rel" value="../../../../${module.lwjgl}"/>
+ 
+     <macrodef name="compile">
+         <attribute name="dest" default="${dest}"/>
+         <attribute name="lang" default="c"/>
+-        <attribute name="gcc.exec" default="${gcc.prefix}gcc${gcc.suffix}"/>
+-        <attribute name="gpp.exec" default="${gcc.prefix}g++${gcc.suffix}"/>
++        <attribute name="gcc.exec" default="cc"/>
++        <attribute name="gpp.exec" default="c++"/>
+         <attribute name="flags" default=""/>
+         <attribute name="simple" default="false"/>
+         <attribute name="relative" default="true"/>
+@@ -65,10 +52,10 @@
+     <macrodef name="build">
+         <attribute name="module"/>
+         <attribute name="suffix" default=""/>
+-        <attribute name="linker" default="gcc"/>
++        <attribute name="linker" default="cc"/>
+         <attribute name="lang" default="c"/>
+-        <attribute name="gcc.exec" default="${gcc.prefix}gcc${gcc.suffix}"/>
+-        <attribute name="gpp.exec" default="${gcc.prefix}g++${gcc.suffix}"/>
++        <attribute name="gcc.exec" default="cc"/>
++        <attribute name="gpp.exec" default="c++"/>
+         <attribute name="flags" default="-Werror -Wfatal-errors"/>
+         <attribute name="simple" default="false"/>
+         <element name="beforeCompile" optional="true"/>
+@@ -119,7 +106,7 @@
+             <condition property="gcc" value="@{gcc.exec}" else="@{gpp.exec}">
+                 <and>
+                     <equals arg1="@{lang}" arg2="c"/>
+-                    <equals arg1="@{linker}" arg2="gcc"/>
++                    <equals arg1="@{linker}" arg2="cc"/>
+                 </and>
+             </condition>
+ 
+@@ -141,7 +128,7 @@
+                 <link/>
+             </apply>
+ 
+-            <apply executable="${gcc.prefix}strip" failonerror="true" taskname="Symbol strip" unless:set="lib-uptodate">
++            <apply executable="strip" failonerror="true" taskname="Symbol strip" unless:set="lib-uptodate">
+                 <filelist dir="${lib.arch}" files="lib${name}.so"/>
+             </apply>
+             <delete file="${lib.native}/touch.txt" quiet="true" unless:set="lib-uptodate"/>
+@@ -150,21 +137,14 @@
+ 
+     <macrodef name="build_simple">
+         <attribute name="module"/>
+-        <attribute name="gcc.exec" default="${gcc.prefix}gcc${gcc.suffix}"/>
+-        <attribute name="gpp.exec" default="${gcc.prefix}g++${gcc.suffix}"/>
++        <attribute name="gcc.exec" default="cc"/>
++        <attribute name="gpp.exec" default="c++"/>
+         <sequential>
+             <build module="@{module}" gcc.exec="@{gcc.exec}" gpp.exec="@{gpp.exec}" simple="true" if:true="${binding.@{module}}"/>
+         </sequential>
+     </macrodef>
+ 
+     <target name="compile-native-platform">
+-        <local name="gcc.version.string"/>
+-        <exec executable="bash" outputproperty="gcc.version.string" logError="true" failonerror="true">
+-            <arg line="-o pipefail -c"/>
+-            <arg value="${gcc.prefix}gcc${gcc.suffix} --version | grep ^.*gcc"/>
+-        </exec>
+-        <echo message='${gcc.prefix}gcc${gcc.suffix} --version: "${gcc.version.string}"' taskname="Compiler"/>
+-
+         <parallel threadsPerProcessor="2">
+ 
+         <!-- CORE -->
+@@ -290,7 +270,7 @@
+                     <arg value="-I/usr/include/gdk-pixbuf-2.0"/>
+                     <arg value="-I/usr/include/atk-1.0"/>
+                     <arg value="-I/usr/lib64/glib-2.0/include"/>
+-                    <arg value="-I/usr/lib/${linux.triplet}/glib-2.0/include"/>
++                    <arg value="-I/usr/lib/glib-2.0/include"/>
+                     <arg value="-I${src.main.rel}/include"/>
+                     <fileset dir="." includes="${src.main}/nfd_gtk.cpp"/>
+                 </compile>
+@@ -308,7 +288,7 @@
+         <build module="nfd" suffix="_portal" simple="true" linker="g++" if:true="${binding.nfd}">
+             <beforeCompile>
+                 <compile lang="c++">
+-                    <arg line="-I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/${linux.triplet}/dbus-1.0/include"/>
++                    <arg line="-I/usr/include/dbus-1.0 -I/usr/lib64/dbus-1.0/include -I/usr/lib/dbus-1.0/include"/>
+                     <arg value="-I${src.main.rel}/include"/>
+                     <fileset dir="." includes="${src.main}/nfd_portal.cpp"/>
+                 </compile>

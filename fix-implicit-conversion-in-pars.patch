@@ -1,0 +1,44 @@
+diff --git a/modules/lwjgl/par/src/main/c/par_shapes.h b/modules/lwjgl/par/src/main/c/par_shapes.h
+index 93810a3..47517be 100644
+--- a/modules/lwjgl/par/src/main/c/par_shapes.h
++++ b/modules/lwjgl/par/src/main/c/par_shapes.h
+@@ -1136,7 +1136,7 @@ static par_shapes__rule* par_shapes__pick_rule(const char* name,
+     if (rand_fn) {
+         r = rand_fn(context);
+     } else {
+-        r = (float) rand() / RAND_MAX;
++        r = (float) rand() / (float) RAND_MAX;
+     }
+     float t = 0;
+     for (int i = 0; i < nrules; i++) {
+diff --git a/modules/lwjgl/par/src/main/c/par_streamlines.h b/modules/lwjgl/par/src/main/c/par_streamlines.h
+index d88c9a3..37fdbf1 100644
+--- a/modules/lwjgl/par/src/main/c/par_streamlines.h
++++ b/modules/lwjgl/par/src/main/c/par_streamlines.h
+@@ -647,7 +647,7 @@ parsl_mesh* parsl_mesh_from_lines(parsl_context* context,
+         float* pvertex = mesh->random_offsets;
+         for (uint16_t spine = 0; spine < spines.num_spines; spine++) {
+             const uint16_t num_segments = spines.spine_lengths[spine];
+-            const float r = (float) rand() / RAND_MAX;
++            const float r = (float) rand() / (float) RAND_MAX;
+             for (uint16_t segment = 0; segment < num_segments; segment++) {
+                 *pvertex++ = r;
+             }
+@@ -1058,7 +1058,7 @@ static parsl_position par__sample_annulus(float radius, parsl_position center,
+     int* seedptr) {
+     unsigned int seed = *seedptr;
+     parsl_position r;
+-    float rscale = 1.0f / UINT_MAX;
++    float rscale = 1.0f / (float) UINT_MAX;
+     while (1) {
+         r.x = 4 * rscale * par__randhash(seed++) - 2;
+         r.y = 4 * rscale * par__randhash(seed++) - 2;
+@@ -1083,7 +1083,7 @@ static parsl_position* par__generate_pts(float width, float height,
+     float radius, int seed, parsl_position* result) {
+ 
+     int maxattempts = 30;
+-    float rscale = 1.0f / UINT_MAX;
++    float rscale = 1.0f / (float) UINT_MAX;
+     parsl_position rvec;
+     rvec.x = rvec.y = radius;
+     float r2 = radius * radius;
