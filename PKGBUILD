@@ -3,7 +3,7 @@
 pkgbase="cups"
 pkgname=('libcups' 'cups')
 pkgver=2.4.16
-pkgrel=1
+pkgrel=2
 arch=(x86_64 aarch64 riscv64 loongarch64)
 license=('Apache-2.0 WITH LLVM-exception AND BSD-3-Clause AND Zlib AND BSD-2-Clause')
 url="https://openprinting.github.io/cups/"
@@ -25,7 +25,7 @@ sha256sums=('0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d'
             'f0b15192952c151b1843742c87850ff3a7d0f3ba5dd236ed16623ef908472ad7'
             '3385047b9ac8a7b13aeb8f0ca55d15f793ce7283516db0155fe28a67923c592d'
             '0bf6a75ba1b051771f155d9a5d36b307a6d40c6857d645b250fe93f3fb713474'
-            '4191ecf3810c1549b7557a4492f542bc170077cee4217486d462655126ef908c')
+            'a17adb47348faf40fd1cb6ef5060dac0cee579db7bcc9fa253fc454eee4c33ed')
 
 prepare() {
   cd "${pkgbase}"-${pkgver}
