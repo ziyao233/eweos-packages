@@ -2,7 +2,7 @@
 
 pkgname=dropbear
 pkgver=2025.88
-pkgrel=2
+pkgrel=3
 pkgdesc='Lightweight SSH server'
 arch=(x86_64 aarch64 riscv64 loongarch64)
 url='https://github.com/mkj/dropbear'
@@ -15,7 +15,7 @@ source=(
   dropbear.service
 )
 sha256sums=('93ebe1294ee3203d3bf548c78d51bde9494d3f24de64eaec380a2620f0431f20'
-            '145096d0d66a61b42c656cc555bc256ebae0a71f4558278d4054911e59f57c87')
+            '7f41d820c16888f8fa0fec9342934d73794bf7532882ac54ae18741dcbb1f7ce')
 
 build()
 {
