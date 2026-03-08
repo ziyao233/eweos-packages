@@ -1,0 +1,26 @@
+From cfbdb371b013d4ea725cd39d8433c54a776eecae Mon Sep 17 00:00:00 2001
+From: Yao Zi <me@ziyao.cc>
+Date: Sun, 8 Mar 2026 12:14:23 +0000
+Subject: [PATCH] Revert "Client: Notify about exposure changes when popup is
+ repositioned"
+
+This reverts commit 727e115a8109c66e2b3008456ff2ff3fd859d63d.
+---
+ .../plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp      | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp b/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp
+index 11e6b370fa9f..6bae7239e21b 100644
+--- a/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp
++++ b/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp
+@@ -705,7 +705,6 @@ void QWaylandXdgSurface::setWindowPosition(const QPoint &position)
+     m_popup->m_waitingForRepositionSerial++;
+     m_popup->reposition(positioner->object(), m_popup->m_waitingForRepositionSerial);
+     m_popup->m_waitingForReposition = true;
+-    window()->updateExposure();
+ }
+ 
+ static QtWayland::xdg_positioner::gravity gravityFromEdge(Qt::Edges edges)
+-- 
+2.53.0
+

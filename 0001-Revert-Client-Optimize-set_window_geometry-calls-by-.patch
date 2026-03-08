@@ -1,0 +1,53 @@
+From 8e2bce5ab32b39c7568ebca13ccb4fdcfb48079d Mon Sep 17 00:00:00 2001
+From: Yao Zi <me@ziyao.cc>
+Date: Sun, 8 Mar 2026 11:43:21 +0000
+Subject: [PATCH] Revert "Client: Optimize set_window_geometry calls by caching
+ last geometry"
+
+This reverts commit 0de9b81a8c60e1078febdeec95abed1f16759f4f.
+---
+ .../shellintegration/xdg-shell/qwaylandxdgshell.cpp       | 8 ++------
+ .../shellintegration/xdg-shell/qwaylandxdgshell_p.h       | 1 -
+ 2 files changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp b/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp
+index 8063fb8fd64f..11e6b370fa9f 100644
+--- a/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp
++++ b/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp
+@@ -448,7 +448,6 @@ void QWaylandXdgSurface::applyConfigure()
+     if (m_popup)
+         m_popup->applyConfigure();
+ 
+-    setContentGeometry(window()->windowContentGeometry());
+     window()->updateExposure();
+ }
+ 
+@@ -464,11 +463,8 @@ void QWaylandXdgSurface::propagateSizeHints()
+ 
+ void QWaylandXdgSurface::setContentGeometry(const QRect &rect)
+ {
+-    if (!window()->isExposed() || m_lastGeometry == rect)
+-        return;
+-
+-    set_window_geometry(rect.x(), rect.y(), rect.width(), rect.height());
+-    m_lastGeometry = rect;
++    if (window()->isExposed())
++        set_window_geometry(rect.x(), rect.y(), rect.width(), rect.height());
+ }
+ 
+ void QWaylandXdgSurface::setSizeHints()
+diff --git a/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell_p.h b/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell_p.h
+index e8bcb5239030..651cb23f4418 100644
+--- a/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell_p.h
++++ b/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell_p.h
+@@ -158,7 +158,6 @@ private:
+     QString m_activationToken;
+     QString m_appId;
+     bool m_alertState = false;
+-    QRect m_lastGeometry;
+ 
+     friend class QWaylandXdgShell;
+ };
+-- 
+2.53.0
+

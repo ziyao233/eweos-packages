@@ -30,10 +30,16 @@ optdepends=('freetds: MS SQL driver'
             'unixodbc: ODBC driver')
 source=(https://download.qt.io/official_releases/qt/${pkgver%.*}/$_qtver/submodules/$_pkgfn.tar.xz
         qt6-base-cflags.patch
-	qt6-base-nostrip.patch)
+	qt6-base-nostrip.patch
+	0001-Revert-wayland-Drop-ShellIntegration-handleExpose.patch
+	0001-Revert-Client-Optimize-set_window_geometry-calls-by-.patch
+	0001-Revert-Client-Notify-about-exposure-changes-when-pop.patch)
 sha256sums=('ead4623bcb54a32257c5b3e3a5aec6d16ec96f4cda58d2e003f5a0c16f72046d'
             '5411edbe215c24b30448fac69bd0ba7c882f545e8cf05027b2b6e2227abc5e78'
-            '4b93f6a79039e676a56f9d6990a324a64a36f143916065973ded89adc621e094')
+            '4b93f6a79039e676a56f9d6990a324a64a36f143916065973ded89adc621e094'
+            'a820c22c796bd73494d055a6c38b33e732c1651d478247f9ff268b74359513e5'
+            '61c80afc15dc8eb8aca5cb43ac6a6858852151fef4e103722d1fb4bbe8114ef7'
+            '00d67a03535d134d8654ef4ea389409bfb4583c3b59434c3f97921395d8ee3f1')
 
 prepare() {
   _patch_ $_pkgfn
