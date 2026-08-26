@@ -14,7 +14,7 @@ sha256sums=('0a61abac85d818437b425df856822e9d6e9982baeae5a93bcb02fe6c0060c61a')
 
 build()
 {
-  export LDFLAGS="$LDFLAGS -Wl,-z,stack-size=$((1024 * 1024))"
+  export LDFLAGS="$LDFLAGS -Wl,-z,stack-size=$((1024 * 1024)) -fuse-ld=lld"
 
   if check_option lto y; then
     _MOLD_LTO=ON
@@ -32,7 +32,6 @@ build()
     -D MOLD_USE_SYSTEM_MIMALLOC=ON \
     -D MOLD_USE_SYSTEM_TBB=ON \
     -D MOLD_USE_MIMALLOC=ON \
-    -D MOLD_USE_MOLD=ON \
     -D MOLD_LTO=${_MOLD_LTO}
   cmake --build build
 }
