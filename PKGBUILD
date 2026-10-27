@@ -20,7 +20,7 @@ build() {
 
 check() {
   cd $pkgname-$pkgver
-  make LDFLAGS_SUER="${LDFLAGS}" check
+  make LDFLAGS_USER="${LDFLAGS}" check
 }
 
 package() {
