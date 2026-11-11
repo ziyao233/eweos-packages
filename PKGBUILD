@@ -6,7 +6,7 @@ _minorpatchver=${pkgver#3.}
 _minorver=${_minorpatchver%%.*}
 _patchver=${_minorpatchver##*.}
 _srcver="$(printf "3%02d%02d00" "$_minorver" "$_patchver")"
-pkgrel=1
+pkgrel=2
 pkgdesc="A C library that implements an SQL database engine"
 arch=(x86_64 aarch64 riscv64 loongarch64)
 license=('blessing')
@@ -21,7 +21,8 @@ build()
 {
   export CFLAGS+=" -DSQLITE_ENABLE_COLUMN_METADATA=1 \
     -DSQLITE_ENABLE_UNLOCK_NOTIFY \
-    -DSQLITE_SECURE_DELETE=1"
+    -DSQLITE_SECURE_DELETE=1 \
+    -DSQLITE_ENABLE_RBU"
 
   # build sqlite
   cd sqlite-autoconf-$_srcver
