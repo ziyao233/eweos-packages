@@ -2,7 +2,7 @@
 
 pkgname=karchive
 pkgver=6.32.0
-pkgrel=1
+pkgrel=2
 pkgdesc='Qt addon providing access to numerous types of archives'
 arch=(x86_64 aarch64 riscv64 loongarch64)
 url='https://community.kde.org/Frameworks'
@@ -11,7 +11,8 @@ depends=(libbz2
          qt6-base
          xz
          zlib
-         zstd)
+         zstd
+	 openssl)
 makedepends=(extra-cmake-modules qt6-tools)
 groups=(kf6)
 source=(https://download.kde.org/stable/frameworks/${pkgver%.*}/$pkgname-$pkgver.tar.xz)
