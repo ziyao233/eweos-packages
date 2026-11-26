@@ -11,7 +11,7 @@ pkgbase=webkit2gtk
 pkgname=(webkit2gtk-4.1 webkit2gtk-6.0
 	 webkit2gtk-4.1-docs webkit2gtk-6.0-docs)
 pkgver=2.54.3
-pkgrel=1
+pkgrel=2
 pkgdesc='GTK port of the WebKit rendering engine'
 url='https://webkitgtk.org/releases/webkitgtk-2.54.3.tar.xz'
 arch=(x86_64 aarch64 riscv64 loongarch64)
@@ -24,12 +24,12 @@ depends=(musl llvm-libs xdg-dbus-proxy gstreamer glib icu zlib-ng
 	 woff2 libxml2 libxslt lcms2 bubblewrap)
 makedepends=(cmake ruby unifdef ninja gstreamer-devel gst-plugins-bad
 	     gobject-introspection gtk3 gtk4 gi-docgen gperf wayland-protocols)
-# 0001: Downstream, Use system allocator instead of bmalloc on all
+# 0001: Downstream, Use system allocator instead of bmalloc/mimalloc on all
 #	architectures.
 source=("https://webkitgtk.org/releases/webkitgtk-$pkgver.tar.xz"
 	0001-Turn-on-system-malloc.patch)
 sha256sums=('2779c1b46f88762e8400650271ba14452dc4e30b37059981552d8b562b7d0862'
-            '24bcf3e2eaa9b5bd00b56b24eb856551d2e39d4d552b81c455972e95a216b215')
+            '1edff6884c981f7fdd6d2bb830d26b361dee02529a693f345049f95642ec2b9a')
 
 prepare() {
 	_patch_ "webkitgtk-$pkgver"
